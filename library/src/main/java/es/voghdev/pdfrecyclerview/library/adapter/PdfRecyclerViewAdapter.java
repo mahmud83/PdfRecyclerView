@@ -74,8 +74,9 @@ public class PdfRecyclerViewAdapter extends RecyclerView.Adapter<PdfRecyclerImag
         ImageView iv = new ImageView(context);
         iv.setBackgroundColor(ContextCompat.getColor(context, android.R.color.white));
 
-        if (renderer == null)
+        if (renderer == null) {
             return null;
+        }
 
         iv.setLayoutParams(createCenteredLayoutParams());
 
@@ -83,7 +84,8 @@ public class PdfRecyclerViewAdapter extends RecyclerView.Adapter<PdfRecyclerImag
     }
 
     private ViewGroup.LayoutParams createCenteredLayoutParams() {
-        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
+        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
         lp.gravity = Gravity.CENTER_HORIZONTAL;
         return lp;
     }
@@ -108,8 +110,9 @@ public class PdfRecyclerViewAdapter extends RecyclerView.Adapter<PdfRecyclerImag
     @SuppressWarnings("NewApi")
     public void close() {
         releaseAllBitmaps();
-        if (renderer != null)
+        if (renderer != null) {
             renderer.close();
+        }
     }
 
     protected void releaseAllBitmaps() {

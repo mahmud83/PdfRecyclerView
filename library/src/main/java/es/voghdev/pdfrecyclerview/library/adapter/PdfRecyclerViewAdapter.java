@@ -1,6 +1,5 @@
 package es.voghdev.pdfrecyclerview.library.adapter;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -20,12 +19,14 @@ import java.io.IOException;
 import java.net.URI;
 
 import es.voghdev.pdfrecyclerview.library.viewholder.PdfRecyclerImageViewHolder;
+import uk.co.senab.photoview.PhotoViewAttacher;
 
 public class PdfRecyclerViewAdapter extends RecyclerView.Adapter<PdfRecyclerImageViewHolder> {
     Context context;
     PdfRenderer renderer;
     String pdfPath;
     LayoutInflater inflater;
+    PdfScale scale = new PdfScale();
 
     public PdfRecyclerViewAdapter(Context context, String pdfPath) {
         this.context = context;
@@ -90,7 +91,7 @@ public class PdfRecyclerViewAdapter extends RecyclerView.Adapter<PdfRecyclerImag
         return lp;
     }
 
-    @SuppressLint("NewApi")
+    @SuppressWarnings("NewApi")
     @Override
     public void onBindViewHolder(PdfRecyclerImageViewHolder holder, int position) {
         PdfRenderer.Page page = getPDFPage(renderer, position);
@@ -98,6 +99,10 @@ public class PdfRecyclerViewAdapter extends RecyclerView.Adapter<PdfRecyclerImag
         Bitmap bitmap = Bitmap.createBitmap(page.getWidth(), page.getHeight(), Bitmap.Config.ARGB_8888);
         page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
         page.close();
+
+        PhotoViewAttacher attacher = new PhotoViewAttacher(iv);
+        attacher.setScale(scale.getScale(), scale.getCenterX(), scale.getCenterY(), true);
+        attacher.setOnMatrixChangeListener(this);
 
         holder.setImageBitmap(bitmap);
     }

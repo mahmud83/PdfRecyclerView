@@ -24,7 +24,8 @@ import es.voghdev.pdfrecyclerview.library.view.EmptyClickListener;
 import es.voghdev.pdfrecyclerview.library.viewholder.PdfRecyclerImageViewHolder;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
-public class PdfRecyclerViewAdapter extends RecyclerView.Adapter<PdfRecyclerImageViewHolder> implements PhotoViewAttacher.OnMatrixChangedListener {
+public class PdfRecyclerViewAdapter extends RecyclerView.Adapter<PdfRecyclerImageViewHolder>
+        implements PhotoViewAttacher.OnMatrixChangedListener {
     Context context;
     PdfRenderer renderer;
     String pdfPath;

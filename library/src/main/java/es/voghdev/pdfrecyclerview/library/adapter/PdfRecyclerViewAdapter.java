@@ -3,6 +3,7 @@ package es.voghdev.pdfrecyclerview.library.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.RectF;
 import android.graphics.pdf.PdfRenderer;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
@@ -10,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -18,14 +20,16 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 
+import es.voghdev.pdfrecyclerview.library.view.EmptyClickListener;
 import es.voghdev.pdfrecyclerview.library.viewholder.PdfRecyclerImageViewHolder;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
-public class PdfRecyclerViewAdapter extends RecyclerView.Adapter<PdfRecyclerImageViewHolder> {
+public class PdfRecyclerViewAdapter extends RecyclerView.Adapter<PdfRecyclerImageViewHolder> implements PhotoViewAttacher.OnMatrixChangedListener {
     Context context;
     PdfRenderer renderer;
     String pdfPath;
     LayoutInflater inflater;
+    View.OnClickListener pageClickListener = new EmptyClickListener();
     PdfScale scale = new PdfScale();
 
     public PdfRecyclerViewAdapter(Context context, String pdfPath) {
@@ -35,7 +39,7 @@ public class PdfRecyclerViewAdapter extends RecyclerView.Adapter<PdfRecyclerImag
     }
 
     @SuppressWarnings("NewApi")
-    private void init() {
+    protected void init() {
         try {
             renderer = new PdfRenderer(getSeekableFileDescriptor(pdfPath));
             inflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
@@ -84,7 +88,7 @@ public class PdfRecyclerViewAdapter extends RecyclerView.Adapter<PdfRecyclerImag
         return new PdfRecyclerImageViewHolder(iv);
     }
 
-    private ViewGroup.LayoutParams createCenteredLayoutParams() {
+    protected ViewGroup.LayoutParams createCenteredLayoutParams() {
         FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
         lp.gravity = Gravity.CENTER_HORIZONTAL;
@@ -100,9 +104,16 @@ public class PdfRecyclerViewAdapter extends RecyclerView.Adapter<PdfRecyclerImag
         page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
         page.close();
 
-        PhotoViewAttacher attacher = new PhotoViewAttacher(iv);
+        PhotoViewAttacher attacher = new PhotoViewAttacher(holder.getImageView());
         attacher.setScale(scale.getScale(), scale.getCenterX(), scale.getCenterY(), true);
         attacher.setOnMatrixChangeListener(this);
+        attacher.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
+            @Override
+            public void onPhotoTap(View view, float x, float y) {
+                pageClickListener.onClick(view);
+            }
+        });
+        attacher.update();
 
         holder.setImageBitmap(bitmap);
     }
@@ -128,5 +139,10 @@ public class PdfRecyclerViewAdapter extends RecyclerView.Adapter<PdfRecyclerImag
     @Override
     public int getItemCount() {
         return renderer != null ? renderer.getPageCount() : 0;
+    }
+
+    @Override
+    public void onMatrixChanged(RectF rect) {
+
     }
 }

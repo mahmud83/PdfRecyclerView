@@ -15,4 +15,8 @@ public class PdfRecyclerImageViewHolder extends RecyclerView.ViewHolder {
     public void setImageBitmap(Bitmap bitmap) {
         this.imageView.setImageBitmap(bitmap);
     }
+
+    public ImageView getImageView() {
+        return imageView;
+    }
 }

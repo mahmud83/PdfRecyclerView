@@ -146,4 +146,58 @@ public class PdfRecyclerViewAdapter extends RecyclerView.Adapter<PdfRecyclerImag
     public void onMatrixChanged(RectF rect) {
 
     }
+
+    public static class Builder {
+        Context context;
+        String pdfPath = "";
+        float scale = PdfScale.DEFAULT_SCALE;
+        float centerX = 0f, centerY = 0f;
+        View.OnClickListener pageClickListener = new EmptyClickListener();
+
+        public Builder(Context context) {
+            this.context = context;
+        }
+
+        public Builder setScale(float scale) {
+            this.scale = scale;
+            return this;
+        }
+
+        public Builder setScale(PdfScale scale) {
+            this.scale = scale.getScale();
+            this.centerX = scale.getCenterX();
+            this.centerY = scale.getCenterY();
+            return this;
+        }
+
+        public Builder setCenterX(float centerX) {
+            this.centerX = centerX;
+            return this;
+        }
+
+        public Builder setCenterY(float centerY) {
+            this.centerY = centerY;
+            return this;
+        }
+
+        public Builder setPdfPath(String path) {
+            this.pdfPath = path;
+            return this;
+        }
+
+        public Builder setOnPageClickListener(View.OnClickListener listener) {
+            if( listener != null )
+                pageClickListener = listener;
+            return this;
+        }
+
+        public PdfRecyclerViewAdapter create() {
+            PdfRecyclerViewAdapter adapter = new PdfRecyclerViewAdapter(context, pdfPath);
+            adapter.scale.setScale(scale);
+            adapter.scale.setCenterX(centerX);
+            adapter.scale.setCenterY(centerY);
+            adapter.pageClickListener = pageClickListener;
+            return adapter;
+        }
+    }
 }

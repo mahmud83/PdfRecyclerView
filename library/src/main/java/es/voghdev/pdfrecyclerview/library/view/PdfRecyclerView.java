@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
 import es.voghdev.pdfrecyclerview.library.adapter.PdfRecyclerViewAdapter;
+import es.voghdev.pdfrecyclerview.library.adapter.PdfScale;
 
 public class PdfRecyclerView extends RecyclerView {
     public PdfRecyclerView(Context context) {
@@ -22,7 +23,7 @@ public class PdfRecyclerView extends RecyclerView {
 
     public static class Builder {
         String pdfPath = "";
-        float scale = 1f;
+        float scale = PdfScale.DEFAULT_SCALE;
         Context context;
 
         public Builder(Context context) {
@@ -39,8 +40,11 @@ public class PdfRecyclerView extends RecyclerView {
 
         public PdfRecyclerView create() {
             PdfRecyclerView recyclerView = new PdfRecyclerView(context);
-            PdfRecyclerViewAdapter adapter = new PdfRecyclerViewAdapter(context, pdfPath);
-            // TODO adapter
+            PdfRecyclerViewAdapter adapter = new PdfRecyclerViewAdapter.Builder(context)
+                    .setPdfPath(pdfPath)
+                    .setScale(scale)
+                    .create();
+
             recyclerView.setAdapter(adapter);
             return recyclerView;
         }

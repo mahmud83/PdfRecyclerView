@@ -1,29 +1,55 @@
 package es.voghdev.pdfrecyclerview.library.view;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
+import es.voghdev.pdfrecyclerview.library.R;
 import es.voghdev.pdfrecyclerview.library.adapter.PdfRecyclerViewAdapter;
 import es.voghdev.pdfrecyclerview.library.adapter.PdfScale;
 
 public class PdfRecyclerView extends RecyclerView {
+    protected static final float DEFAULT_SCALE = PdfScale.DEFAULT_SCALE;
+
     public PdfRecyclerView(Context context) {
         super(context);
     }
 
     public PdfRecyclerView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+
+        init(attrs);
     }
 
     public PdfRecyclerView(Context context, @Nullable AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+
+        init(attrs);
+    }
+
+    protected void init(AttributeSet attrs) {
+        if (attrs != null) {
+            TypedArray a;
+
+            a = getContext().obtainStyledAttributes(attrs, R.styleable.PDFRecyclerView);
+            String pdfPath = a.getString(R.styleable.PDFRecyclerView_pdfUrl);
+            float scale = a.getFloat(R.styleable.PDFRecyclerView_scale, DEFAULT_SCALE);
+            boolean pathIsvalid = pdfPath != null && !pdfPath.isEmpty();
+
+            if (pathIsvalid || scale != DEFAULT_SCALE) {
+                setAdapter(new PdfRecyclerViewAdapter.Builder(getContext())
+                        .setScale(scale)
+                        .setPdfPath(pdfPath)
+                        .create());
+            }
+        }
     }
 
     public static class Builder {
         String pdfPath = "";
-        float scale = PdfScale.DEFAULT_SCALE;
+        float scale = DEFAULT_SCALE;
         Context context;
 
         public Builder(Context context) {

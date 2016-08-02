@@ -186,8 +186,9 @@ public class PdfRecyclerViewAdapter extends RecyclerView.Adapter<PdfRecyclerImag
         }
 
         public Builder setOnPageClickListener(View.OnClickListener listener) {
-            if( listener != null )
+            if (listener != null) {
                 pageClickListener = listener;
+            }
             return this;
         }
 

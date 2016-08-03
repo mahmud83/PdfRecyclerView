@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         PdfRecyclerView recyclerView = new PdfRecyclerView(this);
+        recyclerView.setId(R.id.recyclerView);
         adapter = new PdfRecyclerViewAdapter(this, "adobe.pdf");
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

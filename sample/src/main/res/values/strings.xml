@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Samples</string>
+    <string name="menu_sample2_txt">PdfRecyclerView declared on XML</string>
 </resources>

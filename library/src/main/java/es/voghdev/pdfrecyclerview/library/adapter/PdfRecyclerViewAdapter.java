@@ -26,10 +26,14 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 
 public class PdfRecyclerViewAdapter extends RecyclerView.Adapter<PdfRecyclerImageViewHolder>
         implements PhotoViewAttacher.OnMatrixChangedListener {
+    protected static final int FIRST_PAGE = 0;
+    protected static final float DEFAULT_QUALITY = 2f;
+
     Context context;
     PdfRenderer renderer;
     String pdfPath;
     LayoutInflater inflater;
+    PdfRendererParams params;
     View.OnClickListener pageClickListener = new EmptyClickListener();
     PdfScale scale = new PdfScale();
 
@@ -44,9 +48,24 @@ public class PdfRecyclerViewAdapter extends RecyclerView.Adapter<PdfRecyclerImag
         try {
             renderer = new PdfRenderer(getSeekableFileDescriptor(pdfPath));
             inflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+            params = extractPdfParamsFromFirstPage(renderer, DEFAULT_QUALITY);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @SuppressWarnings("NewApi")
+    private PdfRendererParams extractPdfParamsFromFirstPage(PdfRenderer renderer, float renderQuality) {
+        PdfRenderer.Page samplePage = getPDFPage(renderer, FIRST_PAGE);
+        PdfRendererParams params = new PdfRendererParams();
+
+        params.setRenderQuality(renderQuality);
+        params.setWidth((int) (samplePage.getWidth() * renderQuality));
+        params.setHeight((int) (samplePage.getHeight() * renderQuality));
+
+        samplePage.close();
+
+        return params;
     }
 
     protected ParcelFileDescriptor getSeekableFileDescriptor(String path) throws IOException {
@@ -101,7 +120,7 @@ public class PdfRecyclerViewAdapter extends RecyclerView.Adapter<PdfRecyclerImag
     public void onBindViewHolder(PdfRecyclerImageViewHolder holder, int position) {
         PdfRenderer.Page page = getPDFPage(renderer, position);
 
-        Bitmap bitmap = Bitmap.createBitmap(page.getWidth(), page.getHeight(), Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(params.getWidth(), params.getHeight(), params.getConfig());
         page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
         page.close();
 

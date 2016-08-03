@@ -3,6 +3,7 @@ package es.voghdev.pdfrecyclerview.library.view;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
@@ -34,15 +35,16 @@ public class PdfRecyclerView extends RecyclerView {
             TypedArray a;
 
             a = getContext().obtainStyledAttributes(attrs, R.styleable.PDFRecyclerView);
-            String pdfPath = a.getString(R.styleable.PDFRecyclerView_pdfUrl);
+            String assetName = a.getString(R.styleable.PDFRecyclerView_assetFileName);
             float scale = a.getFloat(R.styleable.PDFRecyclerView_scale, DEFAULT_SCALE);
-            boolean pathIsvalid = pdfPath != null && !pdfPath.isEmpty();
+            boolean pathIsvalid = assetName != null && !assetName.isEmpty();
 
             if (pathIsvalid || scale != DEFAULT_SCALE) {
                 setAdapter(new PdfRecyclerViewAdapter.Builder(getContext())
                         .setScale(scale)
-                        .setPdfPath(pdfPath)
+                        .setPdfPath(assetName)
                         .create());
+                setLayoutManager(new LinearLayoutManager(getContext()));
             }
         }
     }

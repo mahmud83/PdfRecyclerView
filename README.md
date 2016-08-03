@@ -7,7 +7,7 @@ Known Issues
 ------------
 
 Sample app Crashes with long PDF documents. Memory management has to be improved.
-The scale thing is not working as expected
+The scale thing is not working as expected. [photoview][1]-related lines have been temporally commented.
 
 
 TODOs
@@ -18,3 +18,6 @@ TODOs
 - [ ] Load Remote PDF documents from URL
 - [X] Pass checkstyle
 - [X] UI tests
+
+
+[1]: https://github.com/chrisbanes/PhotoView

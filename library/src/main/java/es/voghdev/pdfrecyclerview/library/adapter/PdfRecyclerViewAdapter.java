@@ -124,16 +124,16 @@ public class PdfRecyclerViewAdapter extends RecyclerView.Adapter<PdfRecyclerImag
         page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
         page.close();
 
-        PhotoViewAttacher attacher = new PhotoViewAttacher(holder.getImageView());
-        attacher.setScale(scale.getScale(), scale.getCenterX(), scale.getCenterY(), true);
-        attacher.setOnMatrixChangeListener(this);
-        attacher.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
-            @Override
-            public void onPhotoTap(View view, float x, float y) {
-                pageClickListener.onClick(view);
-            }
-        });
-        attacher.update();
+//        PhotoViewAttacher attacher = new PhotoViewAttacher(holder.getImageView());
+//        attacher.setScale(scale.getScale(), scale.getCenterX(), scale.getCenterY(), true);
+//        attacher.setOnMatrixChangeListener(this);
+//        attacher.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
+//            @Override
+//            public void onPhotoTap(View view, float x, float y) {
+//                pageClickListener.onClick(view);
+//            }
+//        });
+//        attacher.update();
 
         holder.setImageBitmap(bitmap);
     }

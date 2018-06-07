@@ -1,6 +1,7 @@
 # PdfRecyclerView
 
 **DEPRECATED** 
+
 Development has been discontinued for this repository. See [PdfViewPager][2] for PDF rendering
 
 RecyclerView extension that can easily render vertically-scrolling PDF documents. Also downloads documents from a remote URL
